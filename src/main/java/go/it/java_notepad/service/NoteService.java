@@ -1,5 +1,6 @@
 package go.it.java_notepad.service;
 
+import go.it.java_notepad.entity.AccessType;
 import go.it.java_notepad.entity.Note;
 import go.it.java_notepad.entity.User;
 import go.it.java_notepad.repository.NoteRepository;
@@ -25,7 +26,7 @@ public class NoteService {
     private final Random random = new Random();
     private final UserRepository userRepository;
 
-    public List<Note> listAll() {
+    public List<Note> listAllByAutor() {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         User userObject = userRepository.findByUsername(user);
         return noteRepository.findAll()
@@ -33,6 +34,21 @@ public class NoteService {
                 .filter(o -> Objects.equals(o.getUser_id(), userObject.getUser_id()))
                 .collect(Collectors.toList());
     }
+    public List<Note> listAllByPublic() {
+        return noteRepository.findAll()
+                .stream()
+                .filter(o->Objects.equals(o.getAccess(), AccessType.PUBLIC))
+                .collect(Collectors.toList());
+    }
+
+    public String getAuthorNameById(long id) {
+        Note note = noteRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        Long userId = note.getUser_id();
+        User author = userRepository.findById(userId).orElseThrow(EntityNotFoundException::new);
+        return author.getUsername();
+    }
+
+
 
     public String author() {
         SecurityContext context = SecurityContextHolder.getContext();

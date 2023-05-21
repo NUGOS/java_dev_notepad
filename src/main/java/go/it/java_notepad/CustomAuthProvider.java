@@ -1,5 +1,6 @@
 package go.it.java_notepad;
 
+import go.it.java_notepad.service.CustomUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;

@@ -1,8 +1,9 @@
-package go.it.java_notepad;
+package go.it.java_notepad.service;
 
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +17,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -70,9 +71,9 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
         };
 
-        System.out.println("Creating user");
-        System.out.println("result.getUsername() = " + result.getUsername());
-        System.out.println("result.getPassword() = " + result.getPassword());
+        log.info("Creating user");
+        log.info("result.getUsername() = " + result.getUsername());
+        log.info("result.getPassword() = " + result.getPassword());
         return result;
     }
 

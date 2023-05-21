@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/note")
@@ -23,10 +26,28 @@ public class NoteController {
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView result = new ModelAndView("note-list");
-        result.addObject("noteList", noteService.listAll());
+        result.addObject("noteList", noteService.listAllByAutor());
         result.addObject("author", noteService.author());
         return result;
     }
+
+    @GetMapping("/list-all")
+    public ModelAndView listAll() {
+        ModelAndView result = new ModelAndView("note-list-all");
+        List<Note> noteListAll = noteService.listAllByPublic();
+        String[] authors = new String[noteListAll.size()];
+        for (int i = 0; i < noteListAll.size(); i++) {
+            Note note = noteListAll.get(i);
+            String authorName = noteService.getAuthorNameById(note.getId());
+            authors[i] = authorName;
+        }
+        result.addObject("noteListAll", noteListAll);
+        result.addObject("authors", authors);
+        result.addObject("author", noteService.author());
+        return result;
+    }
+
+
 
     @PostMapping("/delete")
     public RedirectView delete(@RequestParam long id) {
