@@ -25,19 +25,18 @@ public class WebSecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
-                        .requestMatchers("/assets/**")
-                        .permitAll()
-                        .requestMatchers("/note/share/**")
-                        .permitAll()
-                        .requestMatchers("/register")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated()
+                .requestMatchers("/assets/**",
+                        "/note/share/**",
+                        "/register",
+                        "/note/list-all")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/login")
-                    .defaultSuccessUrl("/note/list")
-                    .permitAll()
+                .formLogin()
+                .loginPage("/login")
+                .defaultSuccessUrl("/note/list-all")
+                .permitAll()
                 .and();
 
         return http.build();

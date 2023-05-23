@@ -44,9 +44,9 @@ public class NoteController {
         result.addObject("noteListAll", noteListAll);
         result.addObject("authors", authors);
         result.addObject("author", noteService.author());
+        result.addObject("noteList", noteService.listAllByAutor());
         return result;
     }
-
 
 
     @PostMapping("/delete")
@@ -59,6 +59,7 @@ public class NoteController {
     public ModelAndView edit(@RequestParam long id) {
         ModelAndView result = new ModelAndView("note-create-edit");
         result.addObject("note", noteService.getById(id));
+        result.addObject("noteList", noteService.listAllByAutor());
         return result;
     }
 
@@ -86,6 +87,8 @@ public class NoteController {
     public ModelAndView add() {
         ModelAndView result = new ModelAndView("note-create-edit");
         result.addObject("note", null);
+        result.addObject("noteList", noteService.listAllByAutor());
+        result.addObject("author", noteService.author());
         return result;
     }
 
@@ -124,6 +127,7 @@ public class NoteController {
         } else {
             result.addObject("note", null);
         }
+        result.addObject("noteList", noteService.listAllByAutor());
         return result;
     }
 }

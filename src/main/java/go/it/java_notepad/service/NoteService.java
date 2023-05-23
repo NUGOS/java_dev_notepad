@@ -12,10 +12,7 @@ import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -29,11 +26,17 @@ public class NoteService {
     public List<Note> listAllByAutor() {
         String user = SecurityContextHolder.getContext().getAuthentication().getName();
         User userObject = userRepository.findByUsername(user);
+
+        if (userObject == null) {
+            throw new IllegalStateException("User not found");
+        }
+
         return noteRepository.findAll()
                 .stream()
                 .filter(o -> Objects.equals(o.getUser_id(), userObject.getUser_id()))
                 .collect(Collectors.toList());
     }
+
     public List<Note> listAllByPublic() {
         return noteRepository.findAll()
                 .stream()

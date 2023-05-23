@@ -1,51 +1,56 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
-        crossorigin="anonymous">
-  <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic&amp;display=swap">
-  <link rel="stylesheet" href="/assets/css/login-form-styles.css">
-  <link rel="stylesheet" href="/assets/css/login-form.css">
-  <link rel="shortcut icon" href="/assets/img/note.png" type="image/png">
-  <style>
-    a{
-      display: flex;
-      align-items: center;
-      justify-content: center
-    }
-    body {
-    background-image: url("/assets/img/bg-masthead.webp");
-    background-repeat: repeat;
-    background-size: cover;
-    background-position: top;
-    }
-    .error-message {
-    font-size: 35px;
-    position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-    }
-  </style>
-  <title>Нотатки</title>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic&amp;display=swap">
+    <link rel="stylesheet" href="/assets/css/login-form-styles.css">
+    <link rel="stylesheet" href="/assets/css/login-form.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="shortcut icon" href="/assets/img/note.png" type="image/png">
+    <style>
+        a {
+            display: flex;
+            align-items: center;
+            justify-content: center
+        }
+
+        body {
+            background-image: url("/assets/img/bg-masthead.webp");
+            background-repeat: repeat;
+            background-size: cover;
+            background-position: top;
+        }
+
+        .error-message {
+            font-size: 35px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+    <title>Нотатки</title>
 </head>
-  <body>
-    <div class="container-sm">
-      <div th:if="${note != null}">
-       <h1 class="mt-2" th:text="${note.title}"></h1>
-       <h2 class="mt-2" th:utext="${note.content}"></h2>
-      </div>
-      <div th:unless="${note != null}">
-        <div class="error-message row justify-content-center align-items-center">
-          Такої нотатки не існує :(
-        </div>
-      </div>
+<body>
+<div class="nav-fix" th:insert="~{fragments/nav :: nav}"></div>
+<div class="container-sm">
+    <div th:if="${note != null}">
+        <h1 class="mt-2" th:text="${note.title}"></h1>
+        <h2 class="mt-2" th:utext="${note.content}"></h2>
     </div>
-  </body>
+    <div th:unless="${note != null}">
+        <div class="error-message row justify-content-center align-items-center">
+            Такої нотатки не існує :(
+        </div>
+    </div>
+</div>
+</body>
 </html>
