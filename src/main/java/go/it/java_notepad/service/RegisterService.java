@@ -1,6 +1,7 @@
 package go.it.java_notepad.service;
 
 import go.it.java_notepad.entity.User;
+import go.it.java_notepad.entity.UserRole;
 import go.it.java_notepad.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class RegisterService {
         User user = new User();
         user.setUsername(username);
         user.setPassword(passwordEncoder.encode(password));
-        user.setRole("ROLE_USER");
+        user.setRole(UserRole.ROLE_USER);
         user.setEnabled(1);
         userRepository.save(user);
 

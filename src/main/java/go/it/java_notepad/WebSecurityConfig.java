@@ -1,5 +1,6 @@
 package go.it.java_notepad;
 
+import go.it.java_notepad.entity.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -25,6 +26,8 @@ public class WebSecurityConfig {
                 .csrf()
                 .disable()
                 .authorizeHttpRequests()
+                .requestMatchers("/admin/**")
+                .hasAuthority("ROLE_ADMIN")
                 .requestMatchers("/assets/**",
                         "/note/share/**",
                         "/register",
@@ -51,7 +54,7 @@ public class WebSecurityConfig {
     }
 
     @Autowired
-    public void injectCustomAuthProvider(AuthenticationManagerBuilder auth) throws Exception {
+    public void injectCustomAuthProvider(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(authProvider);
     }
 

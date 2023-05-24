@@ -3,9 +3,12 @@ package go.it.java_notepad.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data
@@ -17,12 +20,14 @@ public class User implements UserDetails {
     @Column(name = "email")
     private String username;
     private String password;
-    private String role;
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
     private int enabled;
 
-    @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + role.name()));
+        return authorities;
     }
 
     @Override
@@ -32,7 +37,11 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        if(enabled == 1){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

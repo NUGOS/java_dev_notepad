@@ -3,6 +3,7 @@ package go.it.java_notepad.endpoint;
 import go.it.java_notepad.entity.AccessType;
 import go.it.java_notepad.entity.Note;
 import go.it.java_notepad.service.NoteService;
+import go.it.java_notepad.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Controller;
@@ -22,12 +23,14 @@ import java.util.List;
 public class NoteController {
     private final NoteService noteService;
     private final ConversionService conversionService;
+    private  final UserService userService;
 
     @GetMapping("/list")
     public ModelAndView list() {
         ModelAndView result = new ModelAndView("note-list");
         result.addObject("noteList", noteService.listAllByAutor());
         result.addObject("author", noteService.author());
+        result.addObject("isCurrentUserAdmin", userService.isCurrentUserAdmin());
         return result;
     }
 
@@ -45,6 +48,7 @@ public class NoteController {
         result.addObject("authors", authors);
         result.addObject("author", noteService.author());
         result.addObject("noteList", noteService.listAllByAutor());
+        result.addObject("isCurrentUserAdmin", userService.isCurrentUserAdmin());
         return result;
     }
 
@@ -60,6 +64,7 @@ public class NoteController {
         ModelAndView result = new ModelAndView("note-create-edit");
         result.addObject("note", noteService.getById(id));
         result.addObject("noteList", noteService.listAllByAutor());
+        result.addObject("isCurrentUserAdmin", userService.isCurrentUserAdmin());
         return result;
     }
 
@@ -89,6 +94,7 @@ public class NoteController {
         result.addObject("note", null);
         result.addObject("noteList", noteService.listAllByAutor());
         result.addObject("author", noteService.author());
+        result.addObject("isCurrentUserAdmin", userService.isCurrentUserAdmin());
         return result;
     }
 
@@ -128,6 +134,7 @@ public class NoteController {
             result.addObject("note", null);
         }
         result.addObject("noteList", noteService.listAllByAutor());
+        result.addObject("isCurrentUserAdmin", userService.isCurrentUserAdmin());
         return result;
     }
 }
