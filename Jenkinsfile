@@ -2,9 +2,6 @@ pipeline {
     agent any
     stages {
         stage('Increment Snapshot Version and Tag') {
-            when {
-                branch 'master'
-            }
             steps {
                 script {
                     def oldVersion = readFile('build.gradle').find(/version = '(.*)'/)?.replaceAll(/version = '(.*)'/, '$1').trim()
