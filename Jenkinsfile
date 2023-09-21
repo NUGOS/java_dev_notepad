@@ -26,6 +26,7 @@ pipeline {
                     sh "git tag -d v${newVersion} || true"
                     sh "git tag v${newVersion}"
                     sh "git checkout master"
+                    sh "git pull origin master"
                     sh "git push origin HEAD:master --tags"
                 }
             }
