@@ -8,23 +8,24 @@ pipeline {
         }
         stage('Increment Snapshot Version and Tag') {
             steps {
-                 script {
-                            def versionFile = readFile 'version.txt'
-                            def versionParts = versionFile.split('\\.')
-                            def majorVersion = versionParts[0].toInteger()
-                            def minorVersion = versionParts[1].toInteger()
-                            def patchVersion = versionParts[2].toInteger()
+                script {
+                    def versionFile = readFile 'version.txt'
+                    def versionParts = versionFile.split('\\.')
+                    def majorVersion = versionParts[0].toInteger()
+                    def minorVersion = versionParts[1].toInteger()
+                    def patchVersion = versionParts[2].toInteger()
 
-                            patchVersion++
+                    patchVersion++
 
-                            def newVersion = "${majorVersion}.${minorVersion}.${patchVersion}"
-                            writeFile file: 'version.txt', text: newVersion
+                    def newVersion = "${majorVersion}.${minorVersion}.${patchVersion}"
+                    writeFile file: 'version.txt', text: newVersion
 
-                            sh "git add version.txt"
-                            sh "git commit -m 'Increment version to ${newVersion}'"
-                            sh "git tag v${newVersion}"
-                            sh "git push origin master --tags"
-                        }
+                    sh "git add version.txt"
+                    sh "git commit -m 'Increment version to ${newVersion}'"
+                    sh "git tag v${newVersion}"
+                    sh "git checkout master"
+                    sh "git push origin HEAD:master --tags"
+                }
             }
         }
         stage('Build and Deploy') {
