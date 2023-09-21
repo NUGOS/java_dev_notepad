@@ -22,6 +22,7 @@ pipeline {
 
                     sh "git add version.txt"
                     sh "git commit -m 'Increment version to ${newVersion}'"
+                    sh "git tag -d v${newVersion} || true"
                     sh "git tag v${newVersion}"
                     sh "git checkout master"
                     sh "git push origin HEAD:master --tags"
