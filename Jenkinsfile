@@ -33,7 +33,7 @@ pipeline {
                 sh '''
                     echo "---------Build start-------"
                     sudo systemctl stop java-notepad.service
-                    sudo cp /var/lib/jenkins/workspace/notepad\ test/build/libs/java_notepad-0.0.1-SNAPSHOT.war /var/www/test_ldv_com_usr/data/www/notepad.ldv.com.ua/java_notepad-0.0.1-SNAPSHOT.war
+                    sudo cp /var/lib/jenkins/workspace/notepadtest/build/libs/java_notepad-0.0.1-SNAPSHOT.war /var/www/test_ldv_com_usr/data/www/notepad.ldv.com.ua/java_notepad-0.0.1-SNAPSHOT.war
                     sudo systemctl start java-notepad.service
                     echo "---------Build finish-------"
                 '''
