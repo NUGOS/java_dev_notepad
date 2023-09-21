@@ -1,23 +1,42 @@
 pipeline {
     agent any
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Increment Snapshot Version and Tag') {
             steps {
-                script {
-                    def oldVersion = readFile('build.gradle').find(/version = '(.*)'/)?.replaceAll(/version = '(.*)'/, '$1').trim()
-                    def newVersion = incrementVersion(oldVersion)
-                    sh "./gradlew build -PnewVersion=${newVersion}"
-                    sh "git add build.gradle"
-                    sh "git commit -m 'Increment snapshot version'"
-                    sh "git tag ${newVersion}"
-                    sh "git push origin master"
-                    sh "git push origin ${newVersion}"
-                    sh "systemctl stop java-notepad.service"
-                    def NEW_VERSION = sh(script: 'grep "version =" build.gradle | awk -F"\'" \'{print $2}\'', returnStdout: true).trim()
-                    sh "sudo cp /var/lib/jenkins/workspace/notepad\\ test/build/libs/java_notepad-${NEW_VERSION}-SNAPSHOT.jar /var/www/test_ldv_com_usr/data/www/notepad.ldv.com.ua/java_notepad-${NEW_VERSION}-SNAPSHOT.jar"
-                    sh "ln -sf /var/www/test_ldv_com_usr/data/www/notepad.ldv.com.ua/java_notepad--${NEW_VERSION}-SNAPSHOT.war /var/www/test_ldv_com_usr/data/www/notepad.ldv.com.ua/java_notepad-latest.war"
-                    sh "systemctl start java-notepad.service"
-                }
+                 script {
+                            def versionFile = readFile 'version.txt'
+                            def versionParts = versionFile.split('\\.')
+                            def majorVersion = versionParts[0].toInteger()
+                            def minorVersion = versionParts[1].toInteger()
+                            def patchVersion = versionParts[2].toInteger()
+
+                            patchVersion++
+
+                            def newVersion = "${majorVersion}.${minorVersion}.${patchVersion}"
+                            writeFile file: 'version.txt', text: newVersion
+
+                            sh "git add version.txt"
+                            sh "git commit -m 'Increment version to ${newVersion}'"
+                            sh "git tag v${newVersion}"
+                            sh "git push origin master --tags"
+                        }
+            }
+        }
+        stage('Build and Deploy') {
+            steps {
+                sh './gradlew build'
+                sh '''
+                    echo "---------Build start-------"
+                    sudo systemctl stop java-notepad.service
+                    sudo cp /var/lib/jenkins/workspace/notepad\ test/build/libs/java_notepad-0.0.1-SNAPSHOT.war /var/www/test_ldv_com_usr/data/www/notepad.ldv.com.ua/java_notepad-0.0.1-SNAPSHOT.war
+                    sudo systemctl start java-notepad.service
+                    echo "---------Build finish-------"
+                '''
             }
         }
     }
